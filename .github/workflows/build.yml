@@ -1,0 +1,21 @@
+name: Build Windows executable
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyinstaller
+      - run: pyinstaller --noconfirm --clean --onefile --windowed --name OptiSolver main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OptiSolver-Windows
+          path: dist/OptiSolver.exe
